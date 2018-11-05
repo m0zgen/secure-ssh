@@ -15,8 +15,11 @@ SSHD_PORT="2345"
 # cat /dev/urandom | tr -dc '4-5' | fold -w 5 | head -n 1
 HOST_NAME=$(hostname)
 
+# Selinux support
 yum install policycoreutils-python -y
 
+# Backup sshd_config
+cp /etc/ssh/sshd_config $SCRIPT_PATH
 
 sed -i "s/#Port.*/Port "$SSHD_PORT"/" /etc/ssh/sshd_config
 # sed -i 's/#Port.*/Port 2345/' /etc/ssh/sshd_config
@@ -34,6 +37,6 @@ semanage port -a -t ssh_port_t -p tcp $SSHD_PORT
 
 systemctl restart sshd
 
-echo -e "Your ~/.ssh/config:\n\n"
+echo -e "Your ~/.ssh/config:\n"
 
 echo -e "Host $HOST_NAME\n    HostName $HOST_NAME\n    port $SSHD_PORT"
