@@ -39,4 +39,4 @@ systemctl restart sshd
 
 echo -e "Your ~/.ssh/config:\n"
 
-echo -e "Host $HOST_NAME\n    HostName $HOST_NAME\n    port $SSHD_PORT"
+echo -e "Host $HOST_NAME\n   HostName $HOST_NAME\n   port $SSHD_PORT"
