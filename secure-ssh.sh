@@ -11,6 +11,7 @@ SCRIPT_PATH=$(cd `dirname "${BASH_SOURCE[0]}"` && pwd)
 # Vars
 # -------------------------------------------------------------------------------------------\
 SSHD_PORT="2345"
+HOST_NAME=$(hostname)
 
 yum install policycoreutils-python -y
 
@@ -30,3 +31,7 @@ firewall-cmd --reload
 semanage port -a -t ssh_port_t -p tcp $SSHD_PORT
 
 systemctl restart sshd
+
+echo -e "Your ~/.ssh/config:\n\n"
+
+echo -e "Host $HOST_NAME\n    HostName $HOST_NAME\n    port $SSHD_PORT"
