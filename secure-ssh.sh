@@ -10,9 +10,8 @@ SCRIPT_PATH=$(cd `dirname "${BASH_SOURCE[0]}"` && pwd)
 
 # Vars
 # -------------------------------------------------------------------------------------------\
-SSHD_PORT="2345"
 # Random port generator
-# cat /dev/urandom | tr -dc '4-5' | fold -w 5 | head -n 1
+SSHD_PORT=$(shuf -i 40000-50000 -n 1)
 HOST_NAME=$(hostname)
 
 # Selinux support
