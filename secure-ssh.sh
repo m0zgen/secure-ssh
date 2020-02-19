@@ -36,6 +36,8 @@ semanage port -a -t ssh_port_t -p tcp $SSHD_PORT
 
 systemctl restart sshd
 
+# Echo's
+# -------------------------------------------------------------------------------------------\
 echo -e "Your ~/.ssh/config:\n"
 echo -e "Host $HOST_NAME\n   HostName $HOST_NAME\n   port $SSHD_PORT"
 echo -e "\nIf you will see Many auth error, please use IdentitiesOnly options\as example: ssh -o IdentitiesOnly=yes user@XXX.XXX.XX.x"
