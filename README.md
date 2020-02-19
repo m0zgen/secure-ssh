@@ -7,5 +7,4 @@ Very simple SSH configurator:
 * Secure protocol settings
 * No *permit* settings
 
-*Please use this script after clean install system CentOS / Fedora*
-*Tested and using on CentOS 7 / Fedora*
+*Please use this script after clean install system CentOS / Fedora. Tested and using on CentOS 7 / Fedora*
