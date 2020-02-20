@@ -41,4 +41,4 @@ systemctl restart sshd
 # -------------------------------------------------------------------------------------------\
 echo -e "Your ~/.ssh/config:\n"
 echo -e "Host $HOST_NAME\n   HostName $SRV_IP\n   port $SSHD_PORT"
-echo -e "\nIf you will see Many auth error, please use IdentitiesOnly options\as example: ssh -o IdentitiesOnly=yes user@XXX.XXX.XX.x"
+echo -e "\nIf you will see Many auth error, please use IdentitiesOnly options\as example: ssh -o IdentitiesOnly=yes -p $SSHD_PORT user@$SRV_IP"
