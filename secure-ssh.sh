@@ -13,6 +13,7 @@ SCRIPT_PATH=$(cd `dirname "${BASH_SOURCE[0]}"` && pwd)
 # Random port generator
 SSHD_PORT=$(shuf -i 40000-50000 -n 1)
 HOST_NAME=$(hostname)
+SRV_IP=$(hostname -I | cut -d' ' -f1)
 
 # Selinux support
 yum install policycoreutils-python -y
@@ -39,5 +40,5 @@ systemctl restart sshd
 # Echo's
 # -------------------------------------------------------------------------------------------\
 echo -e "Your ~/.ssh/config:\n"
-echo -e "Host $HOST_NAME\n   HostName $HOST_NAME\n   port $SSHD_PORT"
+echo -e "Host $HOST_NAME\n   HostName $SRV_IP\n   port $SSHD_PORT"
 echo -e "\nIf you will see Many auth error, please use IdentitiesOnly options\as example: ssh -o IdentitiesOnly=yes user@XXX.XXX.XX.x"
