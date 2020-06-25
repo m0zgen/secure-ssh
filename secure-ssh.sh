@@ -15,8 +15,22 @@ SSHD_PORT=$(shuf -i 40000-50000 -n 1)
 HOST_NAME=$(hostname)
 SRV_IP=$(hostname -I | cut -d' ' -f1)
 
-# Selinux support
-yum install policycoreutils-python -y
+if ((EUID != 0)); then
+    echo "Root or Sudo  Required for script ( $(basename $0) )"
+    exit 1
+fi
+
+if [ $(which yum) ]; then
+
+	# Selinux support
+	yum install policycoreutils-python -y
+	firewall-cmd --add-port=$SSHD_PORT/tcp --permanent
+	firewall-cmd --reload
+	semanage port -a -t ssh_port_t -p tcp $SSHD_PORT
+
+elif [ $(which apt) ]; then
+	ufw allow $SSHD_PORT
+fi
 
 # Backup sshd_config
 cp /etc/ssh/sshd_config $SCRIPT_PATH
@@ -31,11 +45,6 @@ sed -i 's/#ClientAliveCountMax.*/ClientAliveCountMax 60/' /etc/ssh/sshd_config
 sed -i 's/#PermitEmptyPasswords.*/PermitEmptyPasswords no/' /etc/ssh/sshd_config
 
 echo "Protocol 2" >> /etc/ssh/sshd_config
-
-firewall-cmd --add-port=$SSHD_PORT/tcp --permanent
-firewall-cmd --reload
-
-semanage port -a -t ssh_port_t -p tcp $SSHD_PORT
 
 systemctl restart sshd
 
