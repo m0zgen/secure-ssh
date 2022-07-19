@@ -74,7 +74,7 @@ update_ssd_config() {
 	fi
 	
 	# CentOS 8 (uncommented parameter)
-	sed -i 's/PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config
+	# sed -i 's/PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config
 	sed -i 's/#ClientAliveInterval.*/ClientAliveInterval 60/' /etc/ssh/sshd_config
 	sed -i 's/#ClientAliveCountMax.*/ClientAliveCountMax 60/' /etc/ssh/sshd_config
 	sed -i 's/#PermitEmptyPasswords.*/PermitEmptyPasswords no/' /etc/ssh/sshd_config
