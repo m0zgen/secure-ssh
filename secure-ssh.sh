@@ -25,6 +25,7 @@ usage() {
 
 	echo -e "\nArguments:
 	-i (internal firewalld zone)
+	-r (allow root logon)
 	-p (custom port)\n"
 	exit 1
 
@@ -34,6 +35,7 @@ usage() {
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         -i|--internal) _INTERNAL=1; ;;
+        -r|--root) _ROOT=1; ;;
 		-p|--port) _PORT=1 _PORT_NUMBER="$2"; shift ;;
 		-h|--help) usage ;;	
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
@@ -48,19 +50,30 @@ else
 	SSHD_PORT=$(shuf -i 40000-50000 -n 1)
 fi
 
+premit_root() {
+	sed -i 's/#PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config
+	sed -i 's/^PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config
+}
+
 update_ssd_config() {
 	# Backup sshd_config
 	cp /etc/ssh/sshd_config $SCRIPT_PATH
 
 	sed -i "s/#Port.*/Port "$SSHD_PORT"/" /etc/ssh/sshd_config
-	# sed -i 's/#Port.*/Port 2345/' /etc/ssh/sshd_config
-	sed -i 's/#PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config
+	
+	if [[ "$_ROOT" -eq "1" ]]; then
+		echo "Root ssh logon is allowed"
+	else
+		premit_root
+	fi
+	
 	# CentOS 8 (uncommented parameter)
 	sed -i 's/PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config
 	sed -i 's/#ClientAliveInterval.*/ClientAliveInterval 60/' /etc/ssh/sshd_config
 	sed -i 's/#ClientAliveCountMax.*/ClientAliveCountMax 60/' /etc/ssh/sshd_config
 	sed -i 's/#PermitEmptyPasswords.*/PermitEmptyPasswords no/' /etc/ssh/sshd_config
 
+	sed -i '/^Protocol/d' /etc/ssh/sshd_config
 	echo "Protocol 2" >> /etc/ssh/sshd_config
 
 	systemctl restart sshd
