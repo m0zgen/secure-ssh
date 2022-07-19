@@ -91,6 +91,7 @@ check_endpoint() {
 		then
 		    ufw allow $SSHD_PORT
 		elif command -v firewall-cmd &> /dev/null
+		then
 			set_firewall
 		else
 			echo "Firewall does not found. Please add $SSHD_PORT manually."
