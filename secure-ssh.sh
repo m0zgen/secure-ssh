@@ -50,9 +50,14 @@ else
 	SSHD_PORT=$(shuf -i 40000-50000 -n 1)
 fi
 
-premit_root() {
+restrict_root() {
 	sed -i 's/#PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config
 	sed -i 's/^PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config
+}
+
+permit_root() {
+	sed -i 's/#PermitRootLogin.*/PermitRootLogin yes/' /etc/ssh/sshd_config
+	sed -i 's/^PermitRootLogin.*/PermitRootLogin yes/' /etc/ssh/sshd_config
 }
 
 update_ssd_config() {
@@ -63,8 +68,9 @@ update_ssd_config() {
 	
 	if [[ "$_ROOT" -eq "1" ]]; then
 		echo "Root ssh logon is allowed"
+		permit_root
 	else
-		premit_root
+		restrict_root
 	fi
 	
 	# CentOS 8 (uncommented parameter)
