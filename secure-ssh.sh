@@ -182,7 +182,7 @@ check_endpoint() {
         then
             set_firewall
         else
-            echo "Firewall does not found. Please add $SSHD_PORT manually."
+            echo "Firewall does not found. Please add $SSHD_PORT manually to your firewall."
             # exit 1
         fi
 
