@@ -13,6 +13,7 @@ SCRIPT_PATH=$(cd `dirname "${BASH_SOURCE[0]}"` && pwd)
 # Random port generator
 HOST_NAME=$(hostname)
 SRV_IP=$(hostname -I | cut -d' ' -f1)
+BACKUPS=$SCRIPT_PATH/backups
 
 # If root / sudoer user
 if ((EUID != 0)); then
@@ -26,6 +27,7 @@ usage() {
 	echo -e "\nArguments:
 	-i (internal firewalld zone)
 	-r (allow root logon)
+	-a (allow passwords)
 	-p (custom port)\n"
 	exit 1
 
@@ -36,8 +38,9 @@ while [[ "$#" -gt 0 ]]; do
     case $1 in
         -i|--internal) _INTERNAL=1; ;;
         -r|--root) _ROOT=1; ;;
-		-p|--port) _PORT=1 _PORT_NUMBER="$2"; shift ;;
-		-h|--help) usage ;;	
+        -a|--allowp) _ALLOWP=1; ;;
+        -p|--port) _PORT=1 _PORT_NUMBER="$2"; shift ;;
+        -h|--help) usage ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
@@ -60,9 +63,23 @@ permit_root() {
 	sed -i 's/^PermitRootLogin.*/PermitRootLogin yes/' /etc/ssh/sshd_config
 }
 
+restrict_passwords() {
+	sed -i -E 's/(^|#)PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config
+}
+
+permit_passwords() {
+	sed -i -E 's/(^|#)PasswordAuthentication.*/PasswordAuthentication yes/' /etc/ssh/sshd_config
+}
+
 update_ssd_config() {
+
+	if [[ ! -d "$BACKUPS" ]]; then
+		mkdir -p $BACKUPS
+	fi
+
 	# Backup sshd_config
-	cp /etc/ssh/sshd_config $SCRIPT_PATH
+	local BACKUP_CONFIG=$BACKUPS/sshd_config_$(date +"%Y_%m_%dT%H_%M_%S")
+	cp /etc/ssh/sshd_config "${BACKUP_CONFIG}"
 
 	sed -i "s/#Port.*/Port "$SSHD_PORT"/" /etc/ssh/sshd_config
 	
@@ -72,17 +89,28 @@ update_ssd_config() {
 	else
 		restrict_root
 	fi
+
+	if [[ "$_ALLOWP" -eq "1" ]]; then
+		echo "Using passwords is allowed"
+		permit_passwords
+	else
+		restrict_passwords
+	fi
 	
-	# CentOS 8 (uncommented parameter)
+	# RHEL / Debian
 	# sed -i 's/PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config
 	sed -i 's/#ClientAliveInterval.*/ClientAliveInterval 60/' /etc/ssh/sshd_config
 	sed -i 's/#ClientAliveCountMax.*/ClientAliveCountMax 60/' /etc/ssh/sshd_config
 	sed -i 's/#PermitEmptyPasswords.*/PermitEmptyPasswords no/' /etc/ssh/sshd_config
+	
+	sed -i 's/^X11Forwarding.*/X11Forwarding no/' /etc/ssh/sshd_config
 
 	sed -i '/^Protocol/d' /etc/ssh/sshd_config
 	echo "Protocol 2" >> /etc/ssh/sshd_config
 
 	systemctl restart sshd
+
+	echo "Done. Backup saved to: ${BACKUP_CONFIG}"
 }
 
 set_firewall() {
