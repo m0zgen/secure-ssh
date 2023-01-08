@@ -4,10 +4,13 @@ Simple SSH configurator:
 
 * Random port generator or custom port setup
 * Disable passwords
+* Disable X11 forwarding
 * Secure protocol settings
+* Session intervals
 * Yes/No *permit* `root` settings
+* Backup previous `sshd_config`
 
-*Please use this script after clean install system CentOS / Fedora / Debian . Tested and using on CentOS 7/8 / Fedora / Debian 11*
+*Please use this script after clean install system CentOS / Fedora / Debian . Tested and using on CentOS / Fedora / Debian 11*
 
 ## Usage
 
@@ -23,11 +26,16 @@ Allow root ssh (script default: root logon will disable) logon:
 ./secure-ssh.sh -r
 ```
 
-Default settings:
+## Defaults
 
+* PermitRootLogin no
+* PermitEmptyPasswords no
+* PasswordAuthentication no
+* ClientAliveInterval 60
+* ClientAliveCountMax 60
+* X11Forwarding no
 * Protocol 2
-* PermitRootLogon no
-* Random generated port number
+* Random generated port number between range: 40000-50000
 
 Also script show finally message with created parameters:
 
