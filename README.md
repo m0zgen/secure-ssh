@@ -12,7 +12,7 @@ Simple SSH configurator:
 
 *Please use this script after clean install system CentOS / Fedora / Debian . Tested and using on CentOS / Fedora / Debian 11*
 
-*Note:* Script *disable* PasswordAuthentication, before script usage, setup [key authentication](https://sys-adm.in/systadm/nix/454-connect-remote-server-with-rsa-key.html) please.
+*Note:* Script *disable* PasswordAuthentication, before script usage, setup [key authentication](https://sys-adm.in/systadm/nix/454-connect-remote-server-with-rsa-key.html) (one more [link](https://www.ibm.com/docs/en/sia?topic=kbaula-enabling-rsa-key-based-authentication-unix-linux-operating-systems-2)) please.
 
 ## Usage
 
