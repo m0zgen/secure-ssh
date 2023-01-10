@@ -1,13 +1,13 @@
 # Script for Secure SSH
 
-Simple SSH configurator:
+Secure SSH configuring:
 
-* Random port generator or custom port setup
-* Disable passwords
+* Random port generator or custom port setup or you can set static port number with `-p` argument
+* Disable passwords or allow passwords with`-a` argument
+* Yes/No *permit* `root` settings (`-r`)
 * Disable X11 forwarding
 * Secure protocol settings
 * Session intervals
-* Yes/No *permit* `root` settings
 * Backup previous `sshd_config`
 
 *Please use this script after clean install system CentOS / Fedora / Debian . Tested and using on CentOS / Fedora / Debian 11*
