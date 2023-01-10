@@ -5,6 +5,7 @@ Secure SSH configuring:
 * Random port generator or custom port setup or you can set static port number with `-p` argument
 * Disable passwords or allow passwords with`-a` argument
 * Yes/No *permit* `root` settings (`-r`)
+* Allow port to internal Firewalld zone (`-i`)
 * Disable X11 forwarding
 * Secure protocol settings
 * Session intervals
