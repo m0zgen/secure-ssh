@@ -2,8 +2,8 @@
 
 Secure SSH configuring:
 
-* Random port generator or custom port setup or you can set static port number with `-p` argument
-* Disable passwords or allow passwords with`-a` argument
+* Random port generator or custom port setup or you can set static port number with (`-p`)
+* Disable passwords or allow passwords with (`-a`)
 * Yes/No *permit* `root` settings (`-r`)
 * Allow port to internal Firewalld zone (`-i`)
 * Disable X11 forwarding
