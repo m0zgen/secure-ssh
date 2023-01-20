@@ -80,7 +80,7 @@ checkDistro() {
         RPM=0
         DEB=1
     else
-        Error "Your distribution is not supported (yet)"
+        echo "Your distribution is not supported (yet)"
         exit 1
     fi
 }
